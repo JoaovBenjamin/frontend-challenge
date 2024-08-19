@@ -4,7 +4,10 @@
   --bg-secondary:#f3f5f6;
   --text-dark: #737380;
   --delete-color: #de3838;
-  --orange-low: #FFA585 
+  --orange-low: #FFA585;
+  --text-dark-2:#41414d;
+  --shapes-dark: #09090a;
+  --shapes: #dce2e6;
 }
 
 * {
