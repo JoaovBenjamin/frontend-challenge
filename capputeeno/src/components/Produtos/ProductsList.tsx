@@ -2,10 +2,20 @@
 import { useProducts } from '@/hooks/useProdutcs'
 import React from 'react'
 import ProductCard from './ProductCard';
+import styled from 'styled-components';
 
 interface ProductsListProps{
 
 }
+
+const ProductConatiner = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill,256px);
+    gap:32px;
+    width: 100%;
+
+    margin-top:32px;
+`
 
 const ProductsList = (props : ProductsListProps) => {
  
@@ -13,7 +23,7 @@ const ProductsList = (props : ProductsListProps) => {
     console.log(data)
    return (
     <>
-        <div>
+        <ProductConatiner>
             {data?.map(product => 
             <ProductCard
             key={product.id}
@@ -21,7 +31,7 @@ const ProductsList = (props : ProductsListProps) => {
             image={product.image_url}
             price={product.price_in_cents}
             />)}
-        </div>
+        </ProductConatiner>
     </>
 )
 }

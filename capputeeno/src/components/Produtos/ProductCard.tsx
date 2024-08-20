@@ -1,3 +1,4 @@
+import { formatValue } from '@/utils/formatVaule'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -38,23 +39,39 @@ const CardContainer = styled.div`
         color: var(---shapes-dark);
     }
 
-    > div{
+    div{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        padding: 8px 0px;
+
+        > div{
         width: 228px;
         height: 1px;
         margin: 8px 0;
+        padding: 0px;
         background: var(--shapes);
     }
+        
+    }
+
 `
 
 const ProductCard = (props : ProductCardProps) => {
+
+    const price = formatValue(props.price)
   return (
     <CardContainer>
-        <img
-        src={props.image}
-        alt='Imagem do Produto'
-        />
-        <h3>{props.title}</h3>
-        <p>{props.price}</p>
+                <img
+                src={props.image}
+                alt='Imagem do Produto'
+                />
+                <div>
+                    <h3>{props.title}</h3>
+                    <div></div>
+                    <p>{price}</p>
+                </div>
     </CardContainer>
 )
 }
