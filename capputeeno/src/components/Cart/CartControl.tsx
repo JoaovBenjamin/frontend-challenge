@@ -24,7 +24,7 @@ const CartCount = styled.span`
 `
 
 const CartControl = () => {
-    const {value} = useLocalStorege('cart-items')
+    const {value} = useLocalStorege('cart-items',[])
   return (
     <ContainerCart>
         <CartIcon/>
