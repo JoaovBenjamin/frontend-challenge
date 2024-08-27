@@ -4,7 +4,8 @@ import axios, { AxiosPromise } from "axios";
 import { useQuery } from "react-query";
 import { useFilter } from "./useFilter";
 import { FilterType } from "@/types/FilterTypes";
-import { getCategoriaByType } from "@/utils/getCategoryByType";
+import { getByPriority, getCategoriaByType } from "@/utils/graphql-filters";
+import { PriorityType } from "@/types/PriorityTypes";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string
 
@@ -12,10 +13,10 @@ const fetcher = (query: string): AxiosPromise<ProductsFetchResponse> =>{
     return axios.post(API_URL,{query})
 }
 
-const mountQuery = (type : FilterType) =>{
-    if(type === FilterType.ALL) return `
+const mountQuery = (type : FilterType, priority: PriorityType) =>{
+    if(type === FilterType.ALL && PriorityType.POPULARITY) return `
                 query{
-                    allProducts{
+                    allProducts(sortField:"sales", sortOrder: "DSC"){
                         id
                         name
                         price_in_cents
@@ -23,9 +24,12 @@ const mountQuery = (type : FilterType) =>{
                     }
                 }
             `
-    return `
+   
+            const sortSettings = getByPriority(priority)
+            const categoryFilter = getCategoriaByType(type)
+            return `
                 query{
-                    allProducts(filter: {category:"${getCategoriaByType(type)}"}){
+                    allProducts(sortField: "${sortSettings.field}", sortOrder:"${sortSettings.order}, ${categoryFilter ? `filter: {category: "${categoryFilter}"}` : ''}"){
                         id
                         name
                         price_in_cents
@@ -36,11 +40,11 @@ const mountQuery = (type : FilterType) =>{
 }
 
 export function useProducts(){
-    const {type} = useFilter();
-    const query = mountQuery(type)
+    const {type, priority} = useFilter();
+    const query = mountQuery(type, priority)
     const {data} = useQuery({
         queryFn : () => fetcher(query),
-        queryKey: ['products', type]
+        queryKey: ['products', type, priority]
     })
 
     return{
